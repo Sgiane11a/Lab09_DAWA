@@ -1,36 +1,176 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 Galería de Películas y Series - Lab09
 
-## Getting Started
+Una aplicación completa que demuestra las diferencias entre **Server-Side Rendering (SSR)** y **Client-Side Rendering (CSR)** usando Next.js y la API de OMDb.
 
-First, run the development server:
+## 🚀 Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### ✅ Página Principal (SSR)
+- **URL**: `/`
+- **Tecnología**: Server-Side Rendering con `async/await`
+- **Contenido**: Lista de películas populares de Marvel
+- **Características**:
+  - Renderizado completo en el servidor
+  - Datos pre-cargados antes del envío del HTML
+  - SEO optimizado
+  - Carga inicial rápida
+
+### ✅ Búsqueda Interactiva (CSR)
+- **URL**: `/search`
+- **Tecnología**: Client-Side Rendering con React Hooks
+- **Características**:
+  - Búsqueda en tiempo real con debounce (400ms)
+  - Resultados sin recargar la página
+  - Interfaz completamente interactiva
+  - Usa `useState`, `useEffect` y `useRef`
+
+### ✅ Modal de Detalles
+- **Funcionalidad**: Ventana modal con información completa
+- **Datos mostrados**:
+  - Poster, título, año, género, duración
+  - Sinopsis completa
+  - Director, escritores, actores principales
+  - Calificaciones (IMDb, Rotten Tomatoes, Metacritic)
+  - Premios y reconocimientos
+  - Fecha de estreno, idioma, país
+  - Taquilla (si disponible)
+
+## 🛠 Tecnologías Utilizadas
+
+- **Next.js 14** - Framework React con App Router
+- **TypeScript** - Tipado estático para mejor desarrollo
+- **Tailwind CSS** - Framework CSS utility-first
+- **Axios** - Cliente HTTP para peticiones a la API
+- **OMDb API** - Base de datos de películas y series
+
+## 📋 Criterios Técnicos Cumplidos
+
+### ✅ Uso correcto de 'use client' directive
+- `app/search/ClientSearch.tsx` - Componente cliente para búsqueda interactiva
+- `app/search/MovieDetailModal.tsx` - Modal cliente para detalles
+
+### ✅ Uso de async/await
+- `app/page.tsx` - Función `fetchPopular()` con async/await en servidor
+- `app/search/ClientSearch.tsx` - Peticiones asíncronas en useEffect
+- `app/search/MovieDetailModal.tsx` - Carga de detalles asíncrona
+
+### ✅ UI atractiva con Tailwind CSS
+- Gradientes y transiciones suaves
+- Cards con hover effects y sombras
+- Modal responsive con backdrop blur
+- Grid layout responsive
+- Componentes con estados de loading
+- Sistema de colores consistente
+
+### ✅ Manejo de hooks useState y useEffect
+- **useState**: 
+  - `query` - Estado de búsqueda
+  - `results` - Resultados de búsqueda
+  - `loading` - Estados de carga
+  - `selected` - Película seleccionada para modal
+  - `detail` - Detalles de la película en modal
+
+- **useEffect**: 
+  - Búsqueda con debounce en ClientSearch
+  - Carga de detalles en MovieDetailModal
+  - Cleanup de timeouts
+
+## 🎯 Justificación SSR vs CSR
+
+### 🟢 Server-Side Rendering (Página Principal)
+
+**¿Por qué SSR?**
+1. **SEO Optimizado**: Los motores de búsqueda pueden indexar el contenido inmediatamente
+2. **Carga Inicial Rápida**: El HTML llega completo al navegador
+3. **Mejor Performance**: Especialmente en dispositivos lentos o conexiones pobres
+4. **Contenido Estático**: Las películas populares no cambian frecuentemente
+5. **First Contentful Paint**: El usuario ve contenido inmediatamente
+
+**Implementación**:
+```typescript
+// Server Component - se ejecuta en el servidor
+async function fetchPopular(): Promise<MovieSummary[]> {
+  const apiKey = process.env.OMDB_API_KEY || 'f1def80d'
+  const url = `https://www.omdbapi.com/?apikey=${apiKey}&s=marvel`
+  const res = await axios.get(url)
+  return res.data.Search || []
+}
+
+export default async function HomePage() {
+  const movies = await fetchPopular() // Datos pre-cargados
+  return <div>{/* HTML renderizado en servidor */}</div>
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🟡 Client-Side Rendering (Búsqueda)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**¿Por qué CSR?**
+1. **Interactividad Total**: Búsqueda en tiempo real sin recargas
+2. **Experiencia Fluida**: Transiciones suaves entre estados
+3. **Menos Carga del Servidor**: Las búsquedas se manejan en el cliente
+4. **Personalización**: Cada usuario tiene su propia experiencia de búsqueda
+5. **Estado Dinámico**: Manejo complejo de estados (query, results, loading, selected)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Implementación**:
+```typescript
+'use client' // Directiva que marca el componente como cliente
 
-## Learn More
+export default function ClientSearch() {
+  const [query, setQuery] = useState('') // Estado de búsqueda
+  const [results, setResults] = useState<MovieSummary[]>([])
+  const [loading, setLoading] = useState(false)
+  
+  useEffect(() => {
+    // Debounce para evitar demasiadas peticiones
+    const debounceTimer = setTimeout(async () => {
+      if (query) {
+        setLoading(true)
+        const res = await axios.get(apiUrl)
+        setResults(res.data.Search || [])
+        setLoading(false)
+      }
+    }, 400)
+    
+    return () => clearTimeout(debounceTimer) // Cleanup
+  }, [query])
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Instalación y Uso
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Instalar dependencias
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Ejecutar en desarrollo
+npm run dev
 
-## Deploy on Vercel
+# Abrir en navegador
+http://localhost:3000
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🔑 API Key
+El proyecto usa una API key de ejemplo. Para uso en producción:
+1. Visita: https://www.omdbapi.com/apikey.aspx
+2. Crea una cuenta gratuita (1000 requests/día)
+3. Reemplaza `f1def80d` por tu API key en el código
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📁 Estructura de Archivos
+
+```
+project09/
+├── app/
+│   ├── layout.tsx          # Layout principal con navegación
+│   ├── page.tsx           # 🟢 Página principal (SSR)
+│   ├── search/
+│   │   ├── page.tsx       # Wrapper para componente CSR
+│   │   ├── ClientSearch.tsx    # 🟡 Búsqueda (CSR)
+│   │   └── MovieDetailModal.tsx # 🟡 Modal detalles (CSR)
+│   └── globals.css
+├── public/
+│   └── poster-placeholder.svg  # Placeholder para posters
+└── package.json
+```
+
+---
+
+**Desarrollado como parte del Lab09 - Comparación SSR vs CSR**
