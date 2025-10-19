@@ -137,6 +137,8 @@ export default function ClientSearch() {
 
 ## 🚀 Instalación y Uso
 
+### 💻 **Desarrollo Local**
+
 ```bash
 # Instalar dependencias
 npm install
@@ -148,11 +150,58 @@ npm run dev
 http://localhost:3000
 ```
 
-### 🔑 API Key
+### 🔑 **API Key**
 El proyecto usa una API key de ejemplo. Para uso en producción:
 1. Visita: https://www.omdbapi.com/apikey.aspx
 2. Crea una cuenta gratuita (1000 requests/día)
-3. Reemplaza `f1def80d` por tu API key en el código
+3. Copia `.env.example` a `.env.local`
+4. Reemplaza `f1def80d` por tu API key
+
+### 🌐 **Despliegue en Render.com**
+
+#### **Opción 1: Despliegue Automático**
+1. Haz fork de este repositorio
+2. Conecta tu cuenta de GitHub con Render.com
+3. Crea un nuevo "Web Service"
+4. Selecciona este repositorio
+5. Render detectará automáticamente el archivo `render.yaml`
+6. ¡Listo! Tu app estará disponible en unos minutos
+
+#### **Opción 2: Configuración Manual**
+1. En Render.com, crea un nuevo "Web Service"
+2. Conecta tu repositorio de GitHub
+3. Configura:
+   - **Build Command**: `npm ci && npm run build`
+   - **Start Command**: `npm start`
+   - **Environment**: `Node`
+4. Variables de entorno:
+   ```
+   NODE_ENV=production
+   OMDB_API_KEY=tu_api_key_aqui
+   NEXT_PUBLIC_OMDB_API_KEY=tu_api_key_aqui
+   ```
+5. Despliega
+
+#### **🔒 Variables de Entorno en Render**
+En el dashboard de Render, añade estas variables:
+- `OMDB_API_KEY`: Tu API key de OMDb
+- `NEXT_PUBLIC_OMDB_API_KEY`: La misma API key (para el cliente)
+- `NODE_ENV`: `production`
+
+### 🔧 **Scripts de Build**
+```bash
+# Build para producción
+npm run build
+
+# Iniciar servidor de producción
+npm start
+
+# Desarrollo con hot reload
+npm run dev
+
+# Linting
+npm run lint
+```
 
 ## 📁 Estructura de Archivos
 
