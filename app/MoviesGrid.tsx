@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import Image from 'next/image'
 import MovieDetailModal from './search/MovieDetailModal'
 
 interface MovieSummary {
@@ -28,12 +29,16 @@ export default function MoviesGrid({ movies }: MoviesGridProps) {
               className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-slate-200 hover:border-blue-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer"
               onClick={() => setSelected(movie.imdbID)}
             >
-              <div className="relative overflow-hidden">
-                <img 
-                  src={movie.Poster !== 'N/A' ? movie.Poster : '/poster-placeholder.svg'} 
-                  alt={movie.Title} 
-                  className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300" 
-                />
+                <div className="relative overflow-hidden">
+                  <div className="relative w-full h-80">
+                    <Image
+                      src={movie.Poster !== 'N/A' ? movie.Poster : '/poster-placeholder.svg'}
+                      alt={movie.Title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
                 <div className="absolute top-3 left-3 bg-blue-600 text-white px-2 py-1 rounded-lg text-sm font-medium">
                   #{index + 1}
                 </div>

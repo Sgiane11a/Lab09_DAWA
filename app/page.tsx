@@ -32,28 +32,7 @@ export default async function HomePage() {
 
         {/* Grid de películas con funcionalidad de modal */}
         <MoviesGrid movies={movies} />
-        
-        {/* Info adicional */}
-        <div className="mt-16 bg-white rounded-2xl shadow-lg border-2 border-slate-200 p-8">
-          <h3 className="text-2xl font-bold text-slate-800 mb-4">📊 ¿Por qué SSR aquí?</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-3xl mb-2">🚀</div>
-              <h4 className="font-semibold text-slate-800 mb-2">Carga Rápida</h4>
-              <p className="text-sm text-slate-600">El contenido está listo al cargar la página, sin esperas</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl mb-2">🔍</div>
-              <h4 className="font-semibold text-slate-800 mb-2">SEO Optimizado</h4>
-              <p className="text-sm text-slate-600">Los motores de búsqueda pueden indexar el contenido fácilmente</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl mb-2">📱</div>
-              <h4 className="font-semibold text-slate-800 mb-2">Mejor UX</h4>
-              <p className="text-sm text-slate-600">Funciona perfecto en conexiones lentas y dispositivos antiguos</p>
-            </div>
-          </div>
-        </div>
+       
       </div>
     </div>
   )

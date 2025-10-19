@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import Image from 'next/image'
 
 interface MovieDetail {
   Title: string
@@ -75,11 +76,17 @@ export default function MovieDetailModal({ imdbID, onClose }: { imdbID: string; 
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Poster */}
                 <div className="lg:col-span-1">
-                  <img 
-                    src={detail.Poster !== 'N/A' ? detail.Poster : '/poster-placeholder.svg'} 
-                    alt={detail.Title}
-                    className="w-full rounded-xl shadow-lg" 
-                  />
+                  <div className="w-full rounded-xl overflow-hidden shadow-lg">
+                    <div className="relative w-full h-[420px]">
+                      <Image
+                        src={detail.Poster !== 'N/A' ? detail.Poster : '/poster-placeholder.svg'}
+                        alt={detail.Title}
+                        fill
+                        sizes="(max-width: 1024px) 420px, 420px"
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
                   
                   {/* Ratings */}
                   <div className="mt-4 space-y-2">

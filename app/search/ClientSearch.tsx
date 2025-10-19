@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
+import Image from 'next/image'
 import MovieDetailModal from './MovieDetailModal'
 
 interface MovieSummary {
@@ -84,7 +85,7 @@ export default function ClientSearch() {
           ) : results.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-4xl mb-4">😔</div>
-              <p className="text-slate-500">No se encontraron resultados para "{query}"</p>
+              <p className="text-slate-500">No se encontraron resultados para &quot;{query}&quot;</p>
               <p className="text-sm text-slate-400 mt-2">Intenta con otro término de búsqueda</p>
             </div>
           ) : (
@@ -96,11 +97,15 @@ export default function ClientSearch() {
                 <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
                   {results.map((r) => (
                     <div key={r.imdbID} className="flex gap-4 p-4 border-2 border-slate-100 rounded-xl hover:border-blue-200 hover:bg-blue-50/50 transition-all cursor-pointer group">
-                      <img 
-                        src={r.Poster !== 'N/A' ? r.Poster : '/poster-placeholder.svg'} 
-                        alt={r.Title} 
-                        className="w-24 h-36 object-cover rounded-lg shadow-md group-hover:shadow-lg transition-shadow" 
-                      />
+                      <div className="w-24 h-36 relative rounded-lg overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
+                        <Image
+                          src={r.Poster !== 'N/A' ? r.Poster : '/poster-placeholder.svg'}
+                          alt={r.Title}
+                          fill
+                          sizes="(max-width: 768px) 96px, 150px"
+                          className="object-cover"
+                        />
+                      </div>
                       <div className="flex-1">
                         <h3 className="font-bold text-lg text-slate-800 group-hover:text-blue-700 transition-colors">{r.Title}</h3>
                         <div className="flex gap-2 mt-1 mb-3">
